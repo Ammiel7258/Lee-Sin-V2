@@ -1,9 +1,10 @@
-package features
+package quotes
 
-import "math/rand"
+import (
+	"math/rand"
+)
 
 func GetRandomMessage() string {
-
 	messages := []string{
     `"Attend to Buisness today. Leave that street-side flower alone." -Great Wall fortune cookie`,
     `"Drinking 12 budweisers and playing league at 21 is at the same level" -Kamden`,

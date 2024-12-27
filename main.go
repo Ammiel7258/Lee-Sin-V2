@@ -5,21 +5,16 @@ import (
 	"log"
 	"os"
 	"os/signal"
-	"strings"
 	"syscall"
 
-  "leesin-v2/features"
+	"leesin-v2/features/handlemessages"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/joho/godotenv"
 )
 
-const prefix string = "!leesin"
-
 func main() {
 	godotenv.Load()
-
-  features.Hello()
 
 	token := os.Getenv("BOT_TOKEN")
 	session, err := discordgo.New("Bot " + token)
@@ -28,21 +23,25 @@ func main() {
 		log.Fatal(err)
 	}
 
-	session.AddHandler(func(s *discordgo.Session, msg *discordgo.MessageCreate) {
-		if msg.Author.ID == s.State.User.ID {
-			return
-		}
+	/*
+	  i want some kind of menu, maybe a switch statement?
 
-		args := strings.Split(msg.Content, " ")
+	  AUTOMATED:
+	  word of the day
+	  sending happy birthday wishes
+	  joining / leaving the server
+	  editing / deleting messages
 
-		if args[0] != prefix {
-			return
-		}
-
-    if args[1] == "hello" {
-      s.ChannelMessageSend(msg.ChannelID, "world!")
-    }
-	})
+	  ON COMMAND:
+	  !leesin help
+	    -this will send the user a list of commands that bot can do
+	  !leesin addBDay (mm/dd/yyyy)
+	  !leesin removeBDay
+	  !leesin updateBDay (mm/dd/yyyy)
+	*/
+  session.AddHandler(func(session *discordgo.Session, message *discordgo.MessageCreate) {
+    handlemessages.HandleMessage(session, message)
+  })
 
 	session.Identify.Intents = discordgo.IntentsAllWithoutPrivileged
 
@@ -58,3 +57,11 @@ func main() {
 	signal.Notify(stop, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
 	<-stop
 }
+
+/*
+  users, err := features.ReadBirthdayData()
+  if err != nil {
+   log.Fatal(err)
+  }
+  features.PrintBirthdayData(users)
+*/
