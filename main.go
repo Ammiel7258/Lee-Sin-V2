@@ -23,22 +23,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-	/*
-	  i want some kind of menu, maybe a switch statement?
-
-	  AUTOMATED:
-	  word of the day
-	  sending happy birthday wishes
-	  joining / leaving the server
-	  editing / deleting messages
-
-	  ON COMMAND:
-	  !leesin help
-	    -this will send the user a list of commands that bot can do
-	  !leesin addBDay (mm/dd/yyyy)
-	  !leesin removeBDay
-	  !leesin updateBDay (mm/dd/yyyy)
-	*/
   session.AddHandler(func(session *discordgo.Session, message *discordgo.MessageCreate) {
     handlemessages.HandleMessage(session, message)
   })

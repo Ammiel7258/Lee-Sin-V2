@@ -39,15 +39,35 @@ func HandleMessage(session *discordgo.Session, message *discordgo.MessageCreate)
 	}
 
 	if isCommandMessage {
-		commandHelper()
+    commandHelper(args[1:])
 	} else {
 		generalMessageHelper(session, message, message.ChannelID)
 	}
 
 }
+	/*
+	  i want some kind of menu, maybe a switch statement?
 
-func commandHelper() {
+	  AUTOMATED:
+	  word of the day
+	  sending happy birthday wishes
+	  joining / leaving the server
+	  editing / deleting messages
+
+	  ON COMMAND:
+	  !leesin help
+	    -this will send the user a list of commands that bot can do
+	  !leesin addBDay (mm/dd/yyyy)
+	  !leesin removeBDay
+	  !leesin updateBDay (mm/dd/yyyy)
+	*/
+
+func commandHelper(args []string) {
   // lets work on the birthday commands
+  n := len(args)
+
+  fmt.Println(n, args)
+
 
 }
 
