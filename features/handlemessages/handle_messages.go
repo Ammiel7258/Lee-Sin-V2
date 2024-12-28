@@ -76,7 +76,7 @@ func generalMessageHelper(session *discordgo.Session, message *discordgo.Message
   randNum := rand.Intn(1000)
 
   // now we send a random message to the server
-  if (randNum < 25) {
+  if (randNum < 10) {
     message := quotes.GetRandomMessage()
     session.ChannelMessageSend(channelID, message)
   }
