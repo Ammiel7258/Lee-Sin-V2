@@ -23,9 +23,9 @@ func main() {
 		log.Fatal(err)
 	}
 
-  session.AddHandler(func(session *discordgo.Session, message *discordgo.MessageCreate) {
-    handlemessages.HandleMessage(session, message)
-  })
+	session.AddHandler(func(session *discordgo.Session, message *discordgo.MessageCreate) {
+		handlemessages.HandleMessage(session, message)
+	})
 
 	session.Identify.Intents = discordgo.IntentsAllWithoutPrivileged
 
@@ -41,11 +41,3 @@ func main() {
 	signal.Notify(stop, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
 	<-stop
 }
-
-/*
-  users, err := features.ReadBirthdayData()
-  if err != nil {
-   log.Fatal(err)
-  }
-  features.PrintBirthdayData(users)
-*/
