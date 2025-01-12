@@ -1,4 +1,4 @@
-package handlemessages
+package handlemessage
 
 import (
 	"errors"

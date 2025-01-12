@@ -7,7 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"leesin-v2/features/handlemessages"
+	"leesin-v2/features/handlemessage"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/joho/godotenv"
@@ -24,7 +24,7 @@ func main() {
 	}
 
 	session.AddHandler(func(session *discordgo.Session, message *discordgo.MessageCreate) {
-		handlemessages.HandleMessages(session, message) // this needs to be redone...
+		handlemessage.HandleMessages(session, message) // this needs to be redone...
 	})
 
 	session.Identify.Intents = discordgo.IntentsAllWithoutPrivileged
