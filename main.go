@@ -7,6 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	"leesin-v2/events"
 	"leesin-v2/features/handlemessage"
 
 	"github.com/bwmarrin/discordgo"
@@ -27,6 +28,10 @@ func main() {
 		handlemessage.HandleMessages(session, message) // this needs to be redone...
 	})
 
+  session.AddHandler(func(session *discordgo.Session, status *discordgo.Ready) {
+    events.SetStatus(session, status)
+  })
+
 	session.Identify.Intents = discordgo.IntentsAllWithoutPrivileged
 
 	err = session.Open()
@@ -35,6 +40,7 @@ func main() {
 	}
 
 	defer session.Close()
+
 	fmt.Println("lee sin v2 activated! press CTRL+C to exit")
 
 	stop := make(chan os.Signal, 1)
