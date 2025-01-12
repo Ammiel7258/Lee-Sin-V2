@@ -17,6 +17,7 @@ type User struct {
 	Id          string `json:"id"`
 	Displayname string `json:"displayname"`
 	Birthdate   string `json:"birthday"`
+	// do I want a flag for if a wish was sent this year?
 }
 
 var users Users
@@ -27,7 +28,7 @@ func init() {
 
 // readBirthdayData reads the data from the birthdayData JSON file. It then returns the Users struct and an error
 func readBirthdayData() error {
-  jsonFile, err := os.Open("data/birthdayData.json")
+	jsonFile, err := os.Open("data/birthdayData.json")
 	if err != nil {
 		return err
 	}
@@ -37,13 +38,13 @@ func readBirthdayData() error {
 }
 
 func writeBirthdayData() error {
-  jsonFile, err := os.OpenFile("data/birthdayData.json", os.O_WRONLY|os.O_TRUNC, 0644)
-  if err != nil {
-    return err
-  }
-  defer jsonFile.Close()
-  
-  return json.NewEncoder(jsonFile).Encode(users)
+	jsonFile, err := os.OpenFile("data/birthdayData.json", os.O_WRONLY|os.O_TRUNC, 0644)
+	if err != nil {
+		return err
+	}
+	defer jsonFile.Close()
+
+	return json.NewEncoder(jsonFile).Encode(users)
 }
 
 // AddBirthday takes an integer id, and birthdate string and appends them to the json file. If the birthdate is already found, return an error
@@ -55,11 +56,11 @@ func AddBirthday(id string, displayname string, birthdate string) error {
 
 	for _, u := range users.Users {
 		if u.Id == id {
-      return errors.New("A user with this ID already exists!")
+			return errors.New("A user with this ID already exists!")
 		}
 	}
 
-  users.Users = append(users.Users, user)
+	users.Users = append(users.Users, user)
 
 	return writeBirthdayData()
 }

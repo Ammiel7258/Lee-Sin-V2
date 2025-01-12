@@ -24,7 +24,7 @@ func main() {
 	}
 
 	session.AddHandler(func(session *discordgo.Session, message *discordgo.MessageCreate) {
-		handlemessages.HandleMessage(session, message)
+		handlemessages.HandleMessages(session, message) // this needs to be redone...
 	})
 
 	session.Identify.Intents = discordgo.IntentsAllWithoutPrivileged
