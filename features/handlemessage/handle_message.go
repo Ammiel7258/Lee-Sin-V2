@@ -8,7 +8,7 @@ import (
 
 	"leesin-v2/config"
 	"leesin-v2/features/birthday"
-	"leesin-v2/features/quotes"
+	"leesin-v2/features/reply"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -95,6 +95,7 @@ func featureMenu() {
 	s, mc := messageData.session, messageData.messageCreate
 
 	s.ChannelMessageSend(mc.ChannelID, "This is the features command")
+  // 🖕
 }
 
 func helpMenu(args []string) {
@@ -141,12 +142,15 @@ func invalidCommandMenu(args []string) {
 }
 
 func generalMessageHelper() {
+  var quote string
 	s, mc := messageData.session, messageData.messageCreate
 
 	if rand.Intn(1000) < 10 {
-		s.ChannelMessageSend(mc.ChannelID, quotes.GetRandomMessage())
+    quote, config.UnusedQuotes, config.UsedQuotes = reply.GetRandomMessage(config.UnusedQuotes, config.UsedQuotes)
+		s.ChannelMessageSend(mc.ChannelID, quote)
 	}
 
+  fmt.Println(len(config.UsedQuotes), len(config.UnusedQuotes)) 
 	// check if original timestamp (message id) is different from last edited timestamp
 }
 
@@ -173,48 +177,3 @@ func validateBirthday(birthdate string) error {
 		fmt.Sprintf("%s is not a valid birthdate, the date must be formatted in this style: ```mm/dd/yyyy```", birthdate),
 	)
 }
-
-/* session.AddHandler(func(s *discordgo.Session, msg *discordgo.MessageCreate) {
-
-		args := strings.Split(msg.Content, " ")
-
-		p := strings.ToLower(args[0])
-		command := strings.ToLower(args[1])
-
-		if p == prefix {
-			switch command {
-			case "help":
-				s.ChannelMessageSend(msg.ChannelID, "This is the help menu:")
-			case "test":
-				s.ChannelMessageSend(msg.ChannelID, "This is the test message")
-			default:
-        s.ChannelMessageSend(msg.ChannelID, "This is not a valid command. Use !leesin help to see a list of commands")
-			}
-		}
-
-	}) */
-/* if pre == prefix {
-	switch command {
-	case "help":
-		session.ChannelMessageSend(message.ChannelID, "This is the help menu:")
-	case "remove_birthday":
-		if len(args) != 2 {
-			session.ChannelMessageSend(message.ChannelID, "Incorrect message format! Use: ```!leesin remove_birthday {mm/dd/yyyy}```")
-			break
-		}
-	case "edit_birthday":
-		if len(args) != 3 {
-			session.ChannelMessageSend(message.ChannelID, "Incorrect message format! Use: ```!leesin edit_birthday mm/dd/yyyy```")
-			break
-		}
-	case "add_birthday":
-		if len(args) != 3 {
-			session.ChannelMessageSend(message.ChannelID, "Incorrect message format! Use: ```!leesin add_birthday mm/dd/yyyy```")
-			break
-		}
-		date := args[2]
-		handleBirthday(message.Author.ID, date, session, message.ChannelID)
-	default:
-		session.ChannelMessageSend(message.ChannelID, "This is not a valid command. Use !leesin help to see a list of commands")
-	}
-} */

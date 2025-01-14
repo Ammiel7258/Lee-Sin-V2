@@ -24,13 +24,22 @@ func main() {
 		log.Fatal(err)
 	}
 
+  /* -----------------------figure out if there is a better way to handle a bunch of events----------------------- */
 	session.AddHandler(func(session *discordgo.Session, message *discordgo.MessageCreate) {
 		handlemessage.HandleMessages(session, message) // this needs to be redone...
 	})
 
-  session.AddHandler(func(session *discordgo.Session, status *discordgo.Ready) {
-    events.SetStatus(session, status)
-  })
+	session.AddHandler(func(session *discordgo.Session, status *discordgo.Ready) {
+		events.SetStatus(session, status)
+	})
+
+	session.AddHandler(func(session *discordgo.Session, deleteEvent *discordgo.MessageDelete) {
+		events.MessageDelete(session, deleteEvent)
+	})
+
+	session.AddHandler(func(session *discordgo.Session, editEvent *discordgo.MessageUpdate) {
+		events.MessageEdit(session, editEvent)
+	})
 
 	session.Identify.Intents = discordgo.IntentsAllWithoutPrivileged
 
