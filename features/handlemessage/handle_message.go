@@ -149,9 +149,6 @@ func generalMessageHelper() {
     quote, config.UnusedQuotes, config.UsedQuotes = reply.GetRandomMessage(config.UnusedQuotes, config.UsedQuotes)
 		s.ChannelMessageSend(mc.ChannelID, quote)
 	}
-
-  fmt.Println(len(config.UsedQuotes), len(config.UnusedQuotes)) 
-	// check if original timestamp (message id) is different from last edited timestamp
 }
 
 func handleBirthday(id string, date string) {

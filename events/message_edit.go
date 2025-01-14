@@ -8,7 +8,15 @@ import (
 )
 
 func MessageEdit(session *discordgo.Session, event *discordgo.MessageUpdate) {
-  var message string
-  message, config.UnusedEditedMessageReplies, config.UsedEditMessageReplies = reply.GetRandomMessage(config.UnusedEditedMessageReplies, config.UsedEditMessageReplies)
+  unusedReplies := config.UnusedEditMessageReplies
+  usedReplies := config.UsedEditMessageReplies
+
+	var message string
+
+	message, unusedReplies, usedReplies = reply.GetRandomMessage(unusedReplies, usedReplies)
+
+  config.UnusedEditMessageReplies = unusedReplies
+  config.UsedEditMessageReplies = usedReplies
+
 	session.ChannelMessageSend(event.ChannelID, message)
 }

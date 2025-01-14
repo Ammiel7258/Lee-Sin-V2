@@ -8,7 +8,16 @@ import (
 )
 
 func MessageDelete(session *discordgo.Session, event *discordgo.MessageDelete) {
-  var message string
-  message, config.UnusedDeleteMessageReplies, config.UsedDeleteMessageReplies = reply.GetRandomMessage(config.UnusedDeleteMessageReplies, config.UsedDeleteMessageReplies)
+  unusedReplies := config.UnusedDeleteMessageReplies
+  usedReplies := config.UsedDeleteMessageReplies
+
+	var message string
+
+	message, unusedReplies, usedReplies = reply.GetRandomMessage(unusedReplies, usedReplies)
+
+  config.UnusedDeleteMessageReplies = unusedReplies
+  config.UsedDeleteMessageReplies = usedReplies
+
 	session.ChannelMessageSend(event.ChannelID, message)
+
 }
