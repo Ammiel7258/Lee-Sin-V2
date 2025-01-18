@@ -41,6 +41,16 @@ func main() {
 		events.MessageEdit(session, editEvent)
 	})
 
+  // needs to be tested
+	session.AddHandler(func(session *discordgo.Session, userJoinEvent *discordgo.GuildMemberAdd) {
+		events.ServerJoin(session, userJoinEvent)
+	})
+  // needs to be tested
+	session.AddHandler(func(session *discordgo.Session, userLeaveEvent *discordgo.GuildMemberRemove) {
+		events.ServerLeave(session, userLeaveEvent)
+	})
+
+
 	session.Identify.Intents = discordgo.IntentsAllWithoutPrivileged
 
 	err = session.Open()
