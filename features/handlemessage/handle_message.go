@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
+	"os"
 	"strings"
 
 	"leesin-v2/config"
@@ -52,8 +53,6 @@ func HandleMessages(s *discordgo.Session, mc *discordgo.MessageCreate) {
   AUTOMATED:
   word of the day
   sending happy birthday wishes
-  joining / leaving the server
-  editing / deleting messages
 
   ON COMMAND:
   !leesin help
@@ -73,7 +72,7 @@ func commandHelper(args []string) {
 
 	switch command {
 	case "help":
-    helpMenu(args[1:])
+		helpMenu(args[1:])
 		break
 	case "features":
 		featureMenu()
@@ -82,7 +81,7 @@ func commandHelper(args []string) {
 		birthdayMenu(args)
 		break
 	default:
-    fmt.Println("in default")
+		fmt.Println("in default")
 		invalidCommandMenu(args)
 	}
 }
@@ -93,33 +92,56 @@ func birthdayMenu(args []string) {
 
 func featureMenu() {
 	s, mc := messageData.session, messageData.messageCreate
+	var sb strings.Builder
 
-	s.ChannelMessageSend(mc.ChannelID, "This is the features command")
-  // 🖕
+	if os.Getenv("KARL_ID") == mc.Author.ID {
+		s.ChannelMessageSendReply(mc.ChannelID, "🖕🖕🖕 figure it out yourself https://github.com/Ammiel7258/Lee-Sin-V2 🖕🖕🖕", mc.Reference())
+		return
+	}
+
+	sb.WriteString("\nHere is a list of leesin's features: \n")
+	sb.WriteString("```")
+	sb.WriteString(`
+    • send funny discord quotes to the text chat on occassion\n
+    • send happy birthday messages (wip)\n
+    • notify users when a member joins or leaves the discord server\n
+    • notify users when a message is edited or deleted
+  `)
+	sb.WriteString("```")
+
+	featuresMessage := sb.String()
+
+	s.ChannelMessageSend(mc.ChannelID, featuresMessage)
 }
 
 func helpMenu(args []string) {
 	var sb strings.Builder
+	karlID := os.Getenv("KARL_ID")
 
 	s, mc := messageData.session, messageData.messageCreate
 
-  if len(args) == 0 {
-    invalidCommandMenu(nil)
-    return
-  }
+	if karlID == mc.Author.ID {
+		s.ChannelMessageSendReply(mc.ChannelID, "🖕🖕🖕 figure it out yourself https://github.com/Ammiel7258/Lee-Sin-V2 🖕🖕🖕", mc.Reference())
+		return
+	}
 
-  helpMessage := sb.String()
-  s.ChannelMessageSend(mc.ChannelID, helpMessage)
+	if len(args) == 0 {
+		invalidCommandMenu(nil)
+		return
+	}
+
+	helpMessage := sb.String()
+	s.ChannelMessageSend(mc.ChannelID, helpMessage)
 }
 
 func invalidCommandMenu(args []string) {
 	var sb strings.Builder
 
 	s, mc := messageData.session, messageData.messageCreate
-  var command string = ""
-  if (len(args) > 0) {
-	  command = args[0]
-  }
+	var command string = ""
+	if len(args) > 0 {
+		command = args[0]
+	}
 
 	if command == "" {
 		sb.WriteString("This command requires arguments to work.")
@@ -142,11 +164,11 @@ func invalidCommandMenu(args []string) {
 }
 
 func generalMessageHelper() {
-  var quote string
+	var quote string
 	s, mc := messageData.session, messageData.messageCreate
 
 	if rand.Intn(1000) < 10 {
-    quote, config.UnusedQuotes, config.UsedQuotes = reply.GetRandomMessage(config.UnusedQuotes, config.UsedQuotes)
+		quote, config.UnusedQuotes, config.UsedQuotes = reply.GetRandomMessage(config.UnusedQuotes, config.UsedQuotes)
 		s.ChannelMessageSend(mc.ChannelID, quote)
 	}
 }
@@ -166,6 +188,10 @@ func handleBirthday(id string, date string) {
 		// handle the error here
 		return
 	}
+}
+
+func karlResponse() {
+
 }
 
 // validateBirthday is a function that will return an error if the birthdate is not a valid date, if the date is valid, return nil
