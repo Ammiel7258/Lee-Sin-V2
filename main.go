@@ -24,9 +24,13 @@ func main() {
 		log.Fatal(err)
 	}
 
-  /* -----------------------figure out if there is a better way to handle a bunch of events----------------------- */
+	/* -----------------------figure out if there is a better way to handle a bunch of events----------------------- */
 	session.AddHandler(func(session *discordgo.Session, message *discordgo.MessageCreate) {
-		handlemessage.HandleMessages(session, message) // this needs to be redone...
+		events.SendQuote(session, message)
+	})
+
+	session.AddHandler(func(session *discordgo.Session, message *discordgo.MessageCreate) {
+		handlemessage.ParseMessage(session, message) // this needs to be redone...
 	})
 
 	session.AddHandler(func(session *discordgo.Session, status *discordgo.Ready) {
@@ -41,15 +45,14 @@ func main() {
 		events.MessageEdit(session, editEvent)
 	})
 
-  // needs to be tested
+	// needs to be tested
 	session.AddHandler(func(session *discordgo.Session, userJoinEvent *discordgo.GuildMemberAdd) {
 		events.ServerJoin(session, userJoinEvent)
 	})
-  // needs to be tested
+	// needs to be tested
 	session.AddHandler(func(session *discordgo.Session, userLeaveEvent *discordgo.GuildMemberRemove) {
 		events.ServerLeave(session, userLeaveEvent)
 	})
-
 
 	session.Identify.Intents = discordgo.IntentsAllWithoutPrivileged
 
